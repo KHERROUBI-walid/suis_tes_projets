@@ -1,0 +1,35 @@
+{% block body %}
+<link href="{{ asset('styles/formulaire.css') }}" rel="stylesheet" />
+<script src="{{ asset('js/form.js') }}"></script>
+
+<div class="fond-modale" id="modaleAddManager">
+  <div class="contenu-modale">
+    <div class="en-tete">
+      <h5 class="titre-modale">Ajouter un chef de projet</h5>
+      <button type="button" class="bouton-fermer">&times;</button>
+
+    </div>
+    <div class="contenu-principal">
+
+      {{ form_start(addManagerForm, { 'attr': { 'id': 'formAddManager', 'action': path('add-manager') } }) }}
+      <div class="champ-groupe">
+        <label for="nom">Nom</label>
+        {{ form_widget(addManagerForm.nom, { 'attr': { 'id': 'nom', 'class': 'champ-input' } }) }}
+      </div>
+      <div class="champ-groupe">
+        <label for="prenom">Prenom</label>
+        {{ form_widget(addManagerForm.prenom, { 'attr': { 'id': 'prenom', 'class': 'champ-input' } }) }}
+      </div>
+      <div class="champ-groupe">
+        <label for="email">E-mail</label>
+        {{ form_widget(addManagerForm.email, { 'attr': { 'id': 'email', 'class': 'champ-input' } }) }}
+      </div>
+      {{ form_end(addManagerForm) }}
+
+    <div class="pied-modale">
+      <button type="button" class="bouton-fermer">Fermer</button>
+      <button type="submit" form="formAddManager" class="bouton-nouveau">Ajouter</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
