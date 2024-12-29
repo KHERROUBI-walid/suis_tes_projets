@@ -96,7 +96,7 @@ class ManagerController extends AbstractController
             'project_id' => $project_id,
         ]);
     }
-
+    
 
     #[IsGranted('ROLE_MANAGER')]
     #[Route('/task/{id}/edit', name: 'edit-task')]

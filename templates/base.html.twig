@@ -76,11 +76,10 @@
                 {% if is_granted("ROLE_ADMIN") %}
 
                     <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">chefs de projets</a></li>
-                    <li><a href="" >Ajouter un chef de projet</a></li>
 
-                {% endif %}
-                {% if is_granted('IS_IMPERSONATOR') %}
-                     <li><a href="{{ path('app_admin', { '_switch_user': '_exit' }) }}" >Revenir en tant qu'admin</a></li>
+                    {% if app.request.attributes.get('_route') == 'app_admin' %}
+                    <li><a href="" data-open-modale="modaleAddManager" class="ouvrir-modale">Ajouter un chef de projet</a></li>
+                    {% endif %}
                 {% endif %}
             </ul>
         </nav>
@@ -116,12 +115,16 @@
 
                 {% elseif is_granted("ROLE_ADMIN") %}
 
-                    <li><a href="" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">chefs de projets</a></li>
-                    <li><a href="" >Ajouter un chef de projet</a></li>
+                    <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">chefs de projets</a></li>
+                    
+                    {% if app.request.attributes.get('_route') == 'app_admin' %}
+                    <li><a href="" data-open-modale="modaleAddManager" class="ouvrir-modale">Ajouter un chef de projet</a></li>
+                    {% endif %}
 
-                {% elseif is_granted('IS_IMPERSONATOR') %}
+                {% endif %}
+
+                {% if is_granted('IS_IMPERSONATOR') %}
                      <li><a href="{{ path('app_admin', { '_switch_user': '_exit' }) }}" >Revenir en tant qu'admin</a></li>
-
                 {% endif %}
             </ul>
         </nav>

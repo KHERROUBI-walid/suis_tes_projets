@@ -31,7 +31,7 @@ body.light-mode {
     height: 100%;
     width: 200px;
     background-color: #1f1f1f;
-    padding: 20px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
@@ -49,6 +49,7 @@ body.light-mode .sidebar {
 
 nav ul {
     list-style: none;
+    padding-left: 0;
 }
 
 nav ul li {
