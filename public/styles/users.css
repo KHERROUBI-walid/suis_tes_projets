@@ -1,3 +1,5 @@
+
+
 /* Mode sombre global */
 body {
     background-color: #121212;
@@ -7,10 +9,11 @@ body {
 
 }
 
-h1 {
+.titre-liste {
     text-align: center;
     color: #ffffff;
-    font-size: 2rem;
+    font-size: 2.5rem !important ;
+    font-family: Arial, sans-serif !important;
     margin-bottom: 20px;
 }
 
@@ -63,30 +66,16 @@ h1 {
     transition: background-color 0.3s ease;
 }
 
-.ouvrir-btn {
-    background-color: #4caf50;
-}
-
-.ouvrir-btn:hover {
-    background-color: #388e3c;
-}
-
-.supprimer-btn {
-    background-color: #f44336;
-}
-
-.supprimer-btn:hover {
-    background-color: #d32f2f;
-}
-
 /* Pagination */
 .pagination {
     text-align: center;
     margin: 20px auto;
+    display: flex;
+    justify-content: center;
 }
 
 .pagination a {
-    color: #b0b0b0;
+    color: #ffffff;
     padding: 8px 12px;
     margin: 0 5px;
     border: 1px solid #444;
@@ -98,7 +87,12 @@ h1 {
 
 .pagination a:hover,
 .pagination a.current {
-    background-color: #4caf50;
+    background-color: #0d6efd;
     color: #ffffff;
-    border-color: #388e3c;
+    border-color:#0b3d87;
+}
+
+.asc, .desc, .sortable {
+    color: white;
+    text-decoration: none;
 }
