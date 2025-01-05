@@ -59,12 +59,12 @@
 
 .light-mode .week, .light-mode .month {
     color: #504e4e;
-    background-color: rgb(237, 237, 237);
+    background-color: #eac4ff;
 
 }
 
 .light-mode .week:hover, .light-mode .month:hover{
-    background-color: rgb(230, 230, 230);
+    background-color: #e2acff;
 }
 
 .week h3, .month h3 {

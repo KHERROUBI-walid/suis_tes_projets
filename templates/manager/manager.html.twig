@@ -22,11 +22,7 @@
 </div>
 {% endfor %}
 
-
-
-
-
-    <h1 class="titre-liste" style="color: white">Liste des utilisateurs</h1>
+    <h1 class="titre-liste">Liste des chefs de projets</h1>
 
 <table class="user-table">
     <thead>
@@ -48,7 +44,10 @@
                     <a style="text-decoration:none;" href="{{ path('app_projects_manager', { '_switch_user': user.email }) }}">
                         <button class="btn btn-success">Ouvrir</button>
                     </a>
-                    <button class="btn btn-danger" data-user-id="{{ user.id }}">Supprimer</button>
+                    <form class="" action="{{ path('manager_delete', { 'manager_id': user.id }) }}" method="post" style="display: inline;" onsubmit="return confirm('Attention ! Vous allez supprimer ce chef de projet !');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_manager_' ~ user.id) }}">
+                            <button type="submit" class="btn btn-danger" data-user-id="{{ user.id }}">Supprimer</button>
+                    </form>
                 </td>
             </tr>
         {% endfor %}
