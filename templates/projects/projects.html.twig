@@ -12,18 +12,29 @@
 
 <main class="page">
 
-
     <h1>Nos projets en cours</h1>
     <div class="statuts-filtres">
-            <p class="statut pas_commence">Pas encore commencé</p>
-            <p class="statut en_cours">En cours</p>
-            <p class="statut termine">Terminé</p>
-            {% if is_granted("ROLE_MANAGER") %}
+        <p class="statut pas_commence">Pas encore commencé</p>
+        <p class="statut en_cours">En cours</p>
+        <p class="statut termine">Terminé</p>
+        {% if is_granted("ROLE_MANAGER") %}
             <p class="statut en_retard">En retard</p>
-            {% endif %}
+        {% endif %}
     </div>
 
-    <div class="projects_section">
+    {# Skeleton Loader avant chargement des projets #}
+    <div id="skeleton" class="skeleton-section">
+        {% for i in 1..12 %}
+            <div class="skeleton-carte">
+                <div class="skeleton-header"></div>
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line small"></div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Section des projets cachée jusqu'au chargement #}
+    <div class="projects_section" id="projects-section" style="display: none;">
         {% set date_aujourdhui = date('now') %}
         <div class="project_cartes">
             {% for project in projects %}
@@ -37,9 +48,8 @@
                         </a>
                         <form class="del_project" action="{{ path('project_delete', { 'project_id': project.id }) }}" method="post" style="display: inline;" onsubmit="return confirm('Attention ! Vous allez supprimer le projet !');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete_project_' ~ project.id) }}">
-                            <button type="submit"><img src="{{ asset('/images/icons/delete(2).png') }}" height="40px" width="35px"></img></button>
+                            <button type="submit"><img src="{{ asset('/images/icons/delete(2).png') }}" height="40px" width="35px"></button>
                         </form>
-
                     </div>
                 {% else %}
                     {% if date_aujourdhui >= project.date_debut and date_aujourdhui <= project.date_fin %}
@@ -56,5 +66,7 @@
             {% endfor %}
         </div>
     </div>
+
 </main>
+
 {% endblock %}

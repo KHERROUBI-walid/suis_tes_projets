@@ -18,10 +18,9 @@ body {
 }
 
 body.light-mode {
-    font-family: 'Roboto', sans-serif;
-    background: url('/images/img2.jpg') no-repeat center center fixed;
-    background-size: cover; 
-    color: #121212; 
+    font-family: 'Roboto', sans-serif; 
+    background: url('/images/violet.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 /* Sidebar */
@@ -44,7 +43,7 @@ body.light-mode {
 }
 
 body.light-mode .sidebar {
-    background-color: #ffffff; 
+    background-color: #f5efff;
 }
 
 nav ul {
@@ -78,7 +77,7 @@ nav ul li a:hover {
 
 body.light-mode nav ul li a.active,
 body.light-mode nav ul li a:hover {
-    background-color: #f0f0f0;
+    background-color: #f1d7ff;
 }
 
 /* Main Content */

@@ -10,6 +10,9 @@
 
     <link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
     <link href="{{ asset('styles/project.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('styles/lazy.css') }}" rel="stylesheet"/>
+
+    <script src="{{ asset('js/lazy.js') }}"></script>
 
 
 
@@ -61,8 +64,8 @@
         
         <nav>
             <ul>
+                <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
                 <li><a href="{{ path('app_projects') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
-                <li><a href="" class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
                 {% if is_granted("ROLE_MANAGER") %}
                    {% if app.request.attributes.get('_route') == 'app_projects_manager' %}
                     <li><a href="" data-open-modale="modaleProjet" class="ouvrir-modale">Ajouter un projet</a></li>
@@ -75,7 +78,7 @@
 
                 {% if is_granted("ROLE_ADMIN") %}
 
-                    <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">chefs de projets</a></li>
+                    <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">Chefs de projets</a></li>
 
                     {% if app.request.attributes.get('_route') == 'app_admin' %}
                     <li><a href="" data-open-modale="modaleAddManager" class="ouvrir-modale">Ajouter un chef de projet</a></li>
@@ -103,8 +106,8 @@
         <nav class="sub-navigation">
              <ul>
                    <li><a href="{{ path('app_projects') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
+                   <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
                 {% if is_granted("ROLE_MANAGER") %}
-                   <li><a href="" class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tasks</a></li>
                    {% if app.request.attributes.get('_route') == 'app_projects_manager' %}
                     <li><a href="#" data-open-modale="modaleProjet" class="ouvrir-modale">Ajouter un projet</a></li>
                    {% endif %}
@@ -115,7 +118,7 @@
 
                 {% elseif is_granted("ROLE_ADMIN") %}
 
-                    <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">chefs de projets</a></li>
+                    <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">Chefs de projets</a></li>
                     
                     {% if app.request.attributes.get('_route') == 'app_admin' %}
                     <li><a href="" data-open-modale="modaleAddManager" class="ouvrir-modale">Ajouter un chef de projet</a></li>

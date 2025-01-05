@@ -1,20 +1,18 @@
-
-
 /* Mode sombre global */
 body {
     background-color: #121212;
     color: #ffffff;
     font-family: Arial, sans-serif;
     margin: 0;
+}
 
+body.light-mode {
+    background-color: #f9f9f9;
+    color: #333333;
 }
 
 .titre-liste {
-    text-align: center;
     color: #ffffff;
-    font-size: 2.5rem !important ;
-    font-family: Arial, sans-serif !important;
-    margin-bottom: 20px;
 }
 
 /* Table stylisée */
@@ -27,8 +25,18 @@ body {
     border: 1px solid #333333;
 }
 
+body.light-mode .user-table {
+    background-color: #f5efff;
+    color: #333333;
+    border: 1px solid #ddd;
+}
+
 .user-table thead {
     background-color: #292929;
+}
+
+body.light-mode .user-table thead {
+    background-color: #e7d8ff;
 }
 
 .user-table th,
@@ -38,6 +46,11 @@ body {
     border: 1px solid #333333;
 }
 
+body.light-mode .user-table th,
+body.light-mode .user-table td {
+    border: 1px solid #ddd;
+}
+
 .user-table th {
     text-transform: uppercase;
     font-size: 0.9rem;
@@ -45,12 +58,25 @@ body {
     color: #ffffff;
 }
 
+body.light-mode .user-table th {
+    color: #333333;
+}
+
 .user-table tbody tr:nth-child(even) {
     background-color: #252525;
 }
 
+body.light-mode .user-table tbody tr:nth-child(even) {
+    background-color: #e7d8ff;
+}
+
 .user-table tbody tr:hover {
     background-color: #333333;
+    transition: background-color 0.3s ease;
+}
+
+body.light-mode .user-table tbody tr:hover {
+    background-color: #f2f2f2;
     transition: background-color 0.3s ease;
 }
 
@@ -85,14 +111,31 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+body.light-mode .pagination a {
+    color: #333333;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+}
+
 .pagination a:hover,
 .pagination a.current {
     background-color: #0d6efd;
     color: #ffffff;
-    border-color:#0b3d87;
+    border-color: #0b3d87;
+}
+
+body.light-mode .pagination a:hover,
+body.light-mode .pagination a.current {
+    background-color: #007bff;
+    color: #ffffff;
+    border-color: #0069d9;
 }
 
 .asc, .desc, .sortable {
     color: white;
     text-decoration: none;
+}
+
+body.light-mode .asc, body.light-mode .desc, body.light-mode .sortable {
+    color: #333333;
 }

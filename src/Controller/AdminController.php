@@ -12,9 +12,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AdminController extends AbstractController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin', name: 'app_admin')]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -43,7 +47,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/add-manager', name: 'add-manager')]
     public function addManager(
         Request $request,
@@ -76,5 +80,33 @@ class AdminController extends AbstractController
         return $this->render('projects/projects.html.twig', [
             'addManagerForm' => $form->createView(),
         ]);
+    }
+
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/manager/{manager_id}/delete', name: 'manager_delete', methods: ['POST'])]
+    public function delete(
+        int $manager_id, 
+        Request $request, 
+        EntityManagerInterface $entityManager, 
+        CsrfTokenManagerInterface $csrfTokenManager
+    ): Response {
+        // Vérification du token CSRF
+        $token = $request->request->get('_token');
+        if (!$csrfTokenManager->isTokenValid(new CsrfToken('delete_manager_' . $manager_id, $token))) {
+            $this->addFlash('error', 'Invalid CSRF token.');
+        }
+
+        $manager = $entityManager->getRepository(User::class)->find($manager_id);
+        if (!$manager) {
+            $this->addFlash('error', 'Le chef de projet n’existe pas.');
+        }
+
+        $entityManager->remove($manager);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Chef de projet supprimé avec succès.');
+
+        return $this->redirectToRoute('app_admin');
     }
 }
