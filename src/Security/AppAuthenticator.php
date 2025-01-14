@@ -52,7 +52,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         $user_roles = $user->getRoles();
 
         if(in_array("ROLE_MANAGER", $user_roles)){
-            return new RedirectResponse('/projects/manager');
+            return new RedirectResponse('/manager/projects');
         } else if (in_array("ROLE_ADMIN", $user_roles)) {
             return new RedirectResponse('/admin');
         }

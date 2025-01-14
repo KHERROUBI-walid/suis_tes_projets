@@ -38,7 +38,6 @@ class AdminController extends AbstractController
             5
         );
 
-        // Créer un formulaire vierge pour l'affichage
         $form = $this->createForm(AddManagerType::class);
 
         return $this->render('manager/manager.html.twig', [
@@ -72,7 +71,7 @@ class AdminController extends AbstractController
             $entityManager->persist($manager);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Chef de projet ajouté avec succès. Son mot de passe est ' .$password_gen);
+            $this->addFlash('success', 'Chef de projet ajouté avec succès.' /* Son mot de passe est ' .$password_gen*/);
 
             return $this->redirectToRoute('app_admin');
         }

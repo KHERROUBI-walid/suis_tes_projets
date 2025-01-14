@@ -12,9 +12,10 @@
     <link href="{{ asset('styles/project.css') }}" rel="stylesheet"/>
     <link href="{{ asset('styles/lazy.css') }}" rel="stylesheet"/>
 
-    <script src="{{ asset('js/lazy.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
-
+    <link rel="preload" href="{{ asset('images/logos/suip_claire.png') }}" as="image">
+    <link rel="preload" href="{{ asset('images/logos/suip_sombre1.png') }}" as="image">
 
 
     {% block javascripts %}
@@ -23,8 +24,7 @@
             const body = document.body;
             const themeButton = document.getElementById('theme-toggle');
             const logo = document.getElementById('logo');
-        
-            // Définir les URLs des logos en fonction du thème clair et sombre
+
             const lightLogo = "{{ (asset('images/logos/suip_claire.png')) }}";
             const darkLogo = "{{ (asset('images/logos/suip_sombre1.png')) }}";
         
@@ -61,78 +61,169 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <img id="logo" height="120px" width="120px" src="{{ asset('images/logos/logo.png') }}" alt="Logo">
-        
+
         <nav>
             <ul>
-                <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
-                <li><a href="{{ path('app_projects') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
+                
+                {# ROLE_MANAGER #}
                 {% if is_granted("ROLE_MANAGER") %}
-                   {% if app.request.attributes.get('_route') == 'app_projects_manager' %}
-                    <li><a href="" data-open-modale="modaleProjet" class="ouvrir-modale">Ajouter un projet</a></li>
-                   {% endif %}
 
-                   {% if app.request.attributes.get('_route') starts with 'app_tasks' %}
-                    <li><a href="" data-open-modale="modaleTache" class="ouvrir-modale">Ajouter une tâche</a></li>
-                   {% endif %}
-                {% endif %}
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/project.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a href="{{ path('app_projects_manager') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
+                    </div>
 
-                {% if is_granted("ROLE_ADMIN") %}
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/task.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
+                    </div>
+                    {% if app.request.attributes.get('_route') == 'app_projects_manager' %}
 
-                    <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">Chefs de projets</a></li>
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/add.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a href="#" data-open-modale="modaleProjet" class="ouvrir-modale">Ajouter un projet</a></li>
+                    </div>
+                    {% endif %}
+
+                    {% if app.request.attributes.get('_route') starts with 'app_tasks' %}
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/add.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a href="#" data-open-modale="modaleTache" class="ouvrir-modale">Ajouter une tâche</a></li>
+                    </div>
+                    {% endif %}
+                
+                
+                {# ROLE_ADMIN #}
+                {% elseif is_granted("ROLE_ADMIN") %}
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/project.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a href="{{ path('app_projects') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
+                    </div>
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/task.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
+                    </div>
+
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/manager.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">Chefs de projets</a></li>
+                    </div>
 
                     {% if app.request.attributes.get('_route') == 'app_admin' %}
-                    <li><a href="" data-open-modale="modaleAddManager" class="ouvrir-modale">Ajouter un chef de projet</a></li>
+
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/add.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a href="#" data-open-modale="modaleAddManager" class="ouvrir-modale">Ajouter un chef de projet</a></li>
+                    </div>
+                    
                     {% endif %}
+
+                {% else %}
+
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/project.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a href="{{ path('app_projects') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
+                    </div>
+
+                    <div class="sidebar-lines">
+                        <img src="{{ asset('images/icons/task.png') }}" height="30px" width="35px" style="padding-right: 10px"></img>
+                        <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
+                    </div>
                 {% endif %}
             </ul>
         </nav>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
 
         <!-- Header -->
-        <header style='display: flex; justify-content: end;'>
+        <header class="header">
             <div class="header-options">
-                <button id="theme-toggle">Mode</button>
-                {% if is_granted("ROLE_MANAGER") or is_granted("ROLE_ADMIN") %}
-                <a href="{{ path('app_logout') }}"><button>Se déconnecter</button></a>
+                
+                {% if app.user %}
+                    <div class="identite">
+                            <img src="{{ asset('images/icons/nom.png') }}" height="30px" width="30px"></img>
+                            <h4>{{ app.user.prenom }} {{ app.user.nom }}</h3>
+                    </div>
                 {% else %}
-                <a href="{{ path('app_login') }}"><button>Se connecter</button></a>
+                    <h4></h4>
                 {% endif %}
+
+                <div class="options">
+                     <div class="log">
+                         <button id="theme-toggle">Mode</button>
+                         <img src="{{ asset('images/icons/light.png') }}" height="25px" width="25px" style="padding-left: 5px"></img>
+                     </div>
+                     {# ROLE_MANAGER ou ROLE_ADMIN #}
+                     {% if is_granted("ROLE_MANAGER") or is_granted("ROLE_ADMIN") %}
+                        <div class="log">
+                         <a href="{{ path('app_logout') }}"><button>Se déconnecter</button></a>
+                         <img src="{{ asset('images/icons/logout.png') }}" height="30px" width="30px" style="padding-left: 5px"></img>
+                        </div>
+                     {% else %}
+                        <div class="log">
+                         <a href="{{ path('app_login') }}"><button>Se connecter</button></a>
+                         <img src="{{ asset('images/icons/login.png') }}" height="30px" width="30px" style="padding-left: 5px"></img>
+                        </div>
+                     {% endif %}
+                </div>
+                
             </div>
         </header>
 
+    <div class="main-content">
+
         <nav class="sub-navigation">
-             <ul>
-                   <li><a href="{{ path('app_projects') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
-                   <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
+            <ul>
+                
+                {# ROLE_MANAGER #}
                 {% if is_granted("ROLE_MANAGER") %}
-                   {% if app.request.attributes.get('_route') == 'app_projects_manager' %}
-                    <li><a href="#" data-open-modale="modaleProjet" class="ouvrir-modale">Ajouter un projet</a></li>
-                   {% endif %}
-
-                   {% if app.request.attributes.get('_route') starts with 'app_tasks' %}
-                    <li><a href="#" data-open-modale="modaleTache" class="ouvrir-modale">Ajouter une tâche</a></li>
-                   {% endif %}
-
+                        <li><a href="{{ path('app_projects_manager') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
+                        <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
+                    {% if app.request.attributes.get('_route') == 'app_projects_manager' %}
+                        <li><a href="#" data-open-modale="modaleProjet" class="ouvrir-modale">Ajouter un projet</a></li>
+                    {% endif %}
+                    {% if app.request.attributes.get('_route') starts with 'app_tasks' %}
+                        <li><a href="#" data-open-modale="modaleTache" class="ouvrir-modale">Ajouter une tâche</a></li>
+                    {% endif %}
+                
+                
+                {# ROLE_ADMIN #}
                 {% elseif is_granted("ROLE_ADMIN") %}
+                    <li><a href="{{ path('app_projects') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
+                    <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
 
                     <li><a href="{{ path('app_admin') }}" class="{{ app.request.attributes.get('_route') starts with 'app_admin' ? 'active' : '' }}">Chefs de projets</a></li>
-                    
                     {% if app.request.attributes.get('_route') == 'app_admin' %}
-                    <li><a href="" data-open-modale="modaleAddManager" class="ouvrir-modale">Ajouter un chef de projet</a></li>
-                    {% endif %}
+                        <li><a href="#" data-open-modale="modaleAddManager" class="ouvrir-modale">Ajouter un chef de projet</a></li>
+                   {% endif %}
 
+
+                {% else %}
+                    <li><a href="{{ path('app_projects') }}" class="{{ app.request.attributes.get('_route') starts with 'app_projects' ? 'active' : '' }}">Projets</a></li>
+                    <li><a class="{{ app.request.attributes.get('_route') starts with 'app_tasks' ? 'active' : '' }}">Tâches</a></li>
                 {% endif %}
 
+                {# ROLE IMPERSONATOR #}
                 {% if is_granted('IS_IMPERSONATOR') %}
-                     <li><a href="{{ path('app_admin', { '_switch_user': '_exit' }) }}" >Revenir en tant qu'admin</a></li>
+                    <li><a href="{{ path('app_admin', { '_switch_user': '_exit' }) }}">Revenir en tant qu'admin</a></li>
                 {% endif %}
             </ul>
         </nav>
 
         <!-- Main Body Content -->
+        {% block alert %}
+            {% for label, messages in app.flashes %}
+                <div class="conteneur-alertes">
+                    <div class="alerte alerte-{{ label }}">
+                        <button type="button" class="fermer-alerte" data-fermer-alerte>&times;</button>
+                        {% for message in messages %}
+                          <strong>{{ message }}</strong>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% endblock %}
         {% block body %}{% endblock %}
         {% block form %}{% endblock %}
     </div>

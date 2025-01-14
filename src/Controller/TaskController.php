@@ -11,12 +11,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TaskController extends AbstractController
 {
-    #[Route('/tasks/jour/{project_id}/{year}/{month}', name: 'app_tasks_day', defaults: ['year' => null, 'month' => null])]
+    #[Route('/tasks/day/{project_id}/{year}/{month}', name: 'app_tasks_day', defaults: ['year' => null, 'month' => null])]
     public function index(TaskRepository $taskRepository, int $project_id, ?int $year, ?int $month): Response
     {
         $currentDate = new DateTime();
@@ -47,7 +49,7 @@ class TaskController extends AbstractController
     }
 
 
-    #[Route('/tasks/semaine/{project_id}', name: 'app_tasks_week')]
+    #[Route('/tasks/week/{project_id}', name: 'app_tasks_week')]
     public function calendarView(
     int $project_id,
     Request $request,
@@ -111,7 +113,7 @@ class TaskController extends AbstractController
     ]);
     }
 
-    #[Route('/tasks/mois/{project_id}', name: 'app_tasks_month')]
+    #[Route('/tasks/month/{project_id}', name: 'app_tasks_month')]
     public function monthlyCalendarView(
         int $project_id,
         Request $request,
@@ -209,6 +211,32 @@ class TaskController extends AbstractController
             'month' => $month,
             'target_task' => $id,
         ]);
+    }
+
+    #[IsGranted('ROLE_MANAGER')]
+    #[Route('/task/drag/task-{id}', name: 'task_drag')]
+    public function updateTaskDate(Request $request, Task $task, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $newDay = $data['newDay'] ?? null;
+    
+        if ($newDay) {
+
+            $current_date = $task->getDateDebutTache();
+            $month = $current_date->format('m');
+            $year = $current_date->format('Y');
+
+            $newDate = \DateTime::createFromFormat('Y-m-d H:i', "$year-$month-$newDay 00:00");
+
+            if($newDate){
+                $task->setDateDebutTache($newDate);
+                $entityManager->persist($task);
+                $entityManager->flush();
+                return new JsonResponse(['success' => true]);
+            }
+        }
+    
+        return new JsonResponse(['error' => 'Invalid date'], 400);
     }
 
     

@@ -12,6 +12,8 @@
 {% block body %}
 <script src="{{ asset('js/tasks.js') }}"></script>
 <link href="{{ asset('styles/tasks_base.css') }}" rel="stylesheet"/>
+
+
 <div class="views">
     <h1 class="h1_tasks">Calendrier des tâches</h1>
     <h1></h1>
@@ -126,7 +128,7 @@ document.getElementById("prev-button").addEventListener("click", (e) => {
         currentMonth = 12;
         currentYear -= 1;
     }
-    window.location.href = `/tasks/jour/{{ project_id }}/${currentYear}/${currentMonth}`;
+    window.location.href = `/tasks/day/{{ project_id }}/${currentYear}/${currentMonth}`;
 });
 
 // Gestion du clic sur le bouton "Suivant"
@@ -137,7 +139,7 @@ document.getElementById("next-button").addEventListener("click", (e) => {
         currentMonth = 1;
         currentYear += 1;
     }
-    window.location.href = `/tasks/jour/{{ project_id }}/${currentYear}/${currentMonth}`;
+    window.location.href = `/tasks/day/{{ project_id }}/${currentYear}/${currentMonth}`;
 });
 
 // Affichage initial
