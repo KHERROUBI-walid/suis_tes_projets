@@ -16,33 +16,32 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectsController extends AbstractController
 {
-    #[Route('/projects', name: 'app_projects', methods: ['GET'])]
+    #[Route('/projects/{statut_envoye}', name: 'app_projects', methods: ['GET'], defaults: ['statut_envoye' => null])]
     public function displayProjects(
+        ?string $statut_envoye, 
         ProjectRepository $projectRepository,
         TaskRepository $taskRepository,
         EntityManagerInterface $entityManager
     ): Response {
-
-        if ($this->isGranted('ROLE_MANAGER')) {
-            return new RedirectResponse('/projects/manager');
-        }
-
-        // Récupérer tous les projets triés par date de fin
-        $projects = $projectRepository->findBy([], ['date_fin' => 'ASC']);
-
+    
+        // Récupérer les projets avec ou sans filtre de statut
+        $projects = $projectRepository->findByStatusAndDateFin($statut_envoye);
+    
         // Mise à jour des statuts des projets
         foreach ($projects as $project) {
             $this->updateProjectStatus($project, $taskRepository, $entityManager);
         }
-
+    
         return $this->render('projects/projects.html.twig', [
             'projects' => $projects,
             'is_manager' => false,
         ]);
     }
+    
 
-    #[Route('/projects/manager', name: 'app_projects_manager', methods: ['GET', 'POST'])]
+    #[Route('/manager/projects/{statut_envoye}', name: 'app_projects_manager', methods: ['GET', 'POST'], defaults: ['statut_envoye' => null])]
     public function managerProjects(
+        ?string $statut_envoye,
         Request $request,
         ProjectRepository $projectRepository,
         TaskRepository $taskRepository,
@@ -51,39 +50,44 @@ class ProjectsController extends AbstractController
         /** @var User|null $user */
         $user = $this->getUser();
 
+        $email = $user->getEmail();
+    
         // Vérification des droits d'accès
         if (!$this->isGranted('ROLE_MANAGER')) {
             throw $this->createAccessDeniedException('Accès réservé aux gestionnaires.');
         }
-
-        $projects = $projectRepository->findByManager($user->getId());
-
+    
+        // Récupérer les projets selon le statut
+        $projects = $projectRepository->findByManagerAndStatus($user->getId(), $statut_envoye);
+    
         foreach ($projects as $project) {
             $this->updateProjectStatus($project, $taskRepository, $entityManager);
         }
-
+    
         // Gestion de l'ajout d'un projet
         $project = new Project();
         $form = $this->createForm(AddProjectType::class, $project);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $project->setUser($user);
             $project->setStatutProjet('pas_commence');
             $entityManager->persist($project);
             $entityManager->flush();
-
+    
             $this->addFlash('success', 'Projet ajouté avec succès.');
-
+    
             return $this->redirectToRoute('app_projects_manager');
         }
-
+    
         return $this->render('projects/projects.html.twig', [
             'projects' => $projects,
             'addProjectForm' => $form->createView(),
             'is_manager' => true,
+            'email' => $email,
         ]);
     }
+    
 
     private function updateProjectStatus(Project $project, TaskRepository $taskRepository, EntityManagerInterface $entityManager): void
     {
@@ -91,27 +95,37 @@ class ProjectsController extends AbstractController
         $dateDebut = $project->getDateDebut();
         $dateFin = $project->getDateFin();
         $tasks = $taskRepository->findBy(['project' => $project]);
-
-        // Gestion des statuts
-        $allTasksCompleted = true;
-        $atLeastOneTaskCompleted = false;
-
-        foreach ($tasks as $task) {
-            if ($task->getStatutTask() !== 'termine') {
-                $allTasksCompleted = false;
-            } else {
-                $atLeastOneTaskCompleted = true;
-            }
-        }
-
-        if ($allTasksCompleted && count($tasks) !== 0) {
-            $project->setStatutProjet('termine');
-        } elseif ($now > $dateFin && !$allTasksCompleted) {
-            $project->setStatutProjet('en_retard');
-        } elseif ($now < $dateDebut || !$atLeastOneTaskCompleted || count($tasks) === 0) {
+    
+        // Statut par défaut si aucune tâche n'existe
+        if (count($tasks) === 0) {
             $project->setStatutProjet('pas_commence');
-        } else {
-            $project->setStatutProjet('en_cours');
+        } 
+        else {
+            $allTasksTerminated = true;
+            $atLeastOneInProgress = false;
+    
+            foreach ($tasks as $task) {
+                $taskStatus = $task->getStatutTask();
+    
+                if ($taskStatus !== 'termine') {
+                    $allTasksTerminated = false;
+                }
+    
+                if ($taskStatus === 'en_cours' || $taskStatus === 'termine') {
+                    $atLeastOneInProgress = true;
+                }
+            }
+    
+            // Détermination du statut prioritaire
+            if ($now > $dateFin && ! $allTasksTerminated) {
+                $project->setStatutProjet('en_retard');
+            } elseif ($allTasksTerminated) {
+                $project->setStatutProjet('termine');
+            } elseif ($atLeastOneInProgress) {
+                $project->setStatutProjet('en_cours');
+            } else {
+                $project->setStatutProjet('pas_commence');
+            }
         }
 
         $entityManager->persist($project);

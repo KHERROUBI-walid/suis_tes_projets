@@ -32,7 +32,11 @@
   .light-mode .statuts-filtres {
     background-color: #f5efff;
   }
-  
+
+  .statuts-filtres a {
+    color: #ffffff;
+  }
+
   .statut {
     padding: 5px 10px;
     border-radius: 20px;
@@ -143,6 +147,10 @@
   .en_retard {
     border-left: 4px solid #ff4d4d;
   }
+
+.tous {
+  border-left: 4px solid #d30fff;
+}
   
   .carte:hover p {
     color: #454545;
@@ -177,6 +185,10 @@
   
   .en_retard:hover {
     background-color: rgb(244, 226, 226);
+  }
+
+  .tous:hover {
+    background-color: #f7d2ff;
   }
   
   /* Mode claire */

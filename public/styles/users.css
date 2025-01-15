@@ -12,6 +12,7 @@ body.light-mode {
 }
 
 .titre-liste {
+    margin-top: 30px;
     color: #ffffff;
 }
 
@@ -90,6 +91,18 @@ body.light-mode .user-table tbody tr:hover {
     cursor: pointer;
     margin: 5px;
     transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: rgb(77, 114, 82);
+}
+
+.btn-success {
+    background-color: rgb(68, 189, 86);
+}
+
+.btn-danger {
+    background-color: rgb(255, 72, 72);
 }
 
 /* Pagination */

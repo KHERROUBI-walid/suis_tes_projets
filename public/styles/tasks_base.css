@@ -67,7 +67,7 @@ button:hover a{
     color: white;
     display: flex;
     justify-content: space-around;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .light-mode .status-filters {
@@ -90,9 +90,12 @@ button:hover a{
     font-weight: bold;
     padding: 5px;
     margin-bottom: 10px;
-    color: #1f1f1f;
+    color: #ffffff;
 }
 
+.light-mode #weekdays {
+    color: black;
+}
 
 
 #calendar .week-row {
@@ -117,7 +120,7 @@ button:hover a{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     padding: 10px;
 }
 
@@ -179,6 +182,10 @@ button:hover a{
     background-color: #c250ff;
 }
 
+.light-mode .day:hover .date-number{
+    color: #ffffff;
+}
+
 .day.empty {
     background-color: #bcbcbc;
     border: none;
@@ -206,7 +213,7 @@ button:hover a{
 }
 
 .light-mode .date-number {
-    color: #333;
+    color: #585858;
 }
 
 /* Style des tâches */
@@ -342,4 +349,16 @@ button:hover a{
 .show-popup .popup,
 .show-popup .popup-overlay {
     display: block;
+}
+
+
+/***************  drag and drop ********************/
+.task.en-deplacement {
+    opacity: 0.5;
+    border: 2px dashed #007bff;
+}
+
+.day.survole {
+    background-color: #f0f8ff;
+    border: 2px dashed #007bff;
 }
