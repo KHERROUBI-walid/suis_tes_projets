@@ -9,6 +9,9 @@ framework:
     #esi: true
     #fragments: true
 
+    trusted_proxies: '10.5.10.0/8'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-port']
+    
 when@test:
     framework:
         test: true
