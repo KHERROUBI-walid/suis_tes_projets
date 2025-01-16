@@ -65,13 +65,17 @@ class AdminController extends AbstractController
             $password_gen = bin2hex(random_bytes(6));
 
             $manager->setRoles(["ROLE_MANAGER"]);
-            $manager->setLastLogin(new \DateTime('31-12-1999 00:00'));
+            $manager->setLastLogin(new \DateTime());
             $manager->setPassword($hasher->hashPassword($manager, $password_gen));
+
+            
 
             $entityManager->persist($manager);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Chef de projet ajouté avec succès.' /* Son mot de passe est ' .$password_gen*/);
+            $nom_manager = $manager->getNom();
+
+            $this->addFlash('success', 'Le chef de projet "' .$nom_manager. '" est ajouté avec succès, son mot de passe est ' .$password_gen);
 
             return $this->redirectToRoute('app_admin');
         }
